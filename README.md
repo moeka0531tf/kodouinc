@@ -4,6 +4,7 @@
 【 kououinc.ino 】
 - IBI : ビート間の時間を保存するための変数
 - Paulse: boolean値, paluseの値が高いとtrueになるフラグ的な役割
+- QS: BPMが計算されたらtrueにする変数、フラグ
 
 【 interrupt.ino 】
 - thresh : 心拍の瞬間を見つけるための変数、閾値
@@ -78,6 +79,14 @@ Timer2を初期化して、2msごとに割り込み処理を行う。
     - lastBeatTimeを更新
 - もし初めてbeatが感知された場合そのフラグを解除する
 - もし2回目のフラグが感知された場合そのフラグを解除し、rateの全ての要素にIBIの値を入れる
+- 最新の10回分のIBIの合計値をrunningTotalという変数に格納し平均を出す
+- 60000/runningTotalでBPMを求める
+- QSをtrueにする(このinterruptが終わるまでは元に戻らない)
+
+- もしSignalが閾値以下でありPaluseがtrueの場合
+    - Lowの値を出力
+    - Paluseをfalse
+    
 
 # 割り込み処理
 - マイコンは同時にひとつの処理しかできない
