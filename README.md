@@ -27,8 +27,17 @@
 - 別ファイルのinterruptSetUp()を実行する
 
 ## void loop()
+- 入ってきたSiganalを出力する
+- もしQSがtrueだったら(=Beatが観測されたら)下記処理を実行
+    - fadeRateを255に設定
+    - BPMとIBIの値を出力するようにする
+    - Beat観測のフラグQSをfalseにする
+    - ledFadeToBeatを実行する
 
 ## void ledFadeToBeat()
+- fadeRateを15引く
+- 値を0から255の間に納めるようにする
+- fadeRateの値をアナログ波として出力する
 
 ## void sendDataToProcessing(char symbol, imt data)
 - symbolとdataを出力する関数
