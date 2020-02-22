@@ -1,7 +1,7 @@
 volatile int rate[10];                    // used to hold last ten IBI values
 volatile unsigned long sampleCounter = 0;          // used to determine pulse timing
 volatile unsigned long lastBeatTime = 0;           // used to find the inter beat interval
-volatile int P =512;                      // used to find peak in pulse wave
+volatile int P = 512;                      // used to find peak in pulse wave
 volatile int T = 512;                     // used to find trough in pulse wave
 volatile int thresh = 512;                // used to find instant moment of heart beat
 volatile int amp = 100;                   // used to hold amplitude of pulse waveform

@@ -19,21 +19,41 @@ void setup(){
    //analogReference(EXTERNAL);
 }
 void loop(){
-  sendDataToProcessing(‘S’, Signal);     // send Processing the raw Pulse Sensor data
-  if (QS == true){                       // Quantified Self flag is true when arduino finds a heartbeat
-        fadeRate = 255;                  // Set ‘fadeRate’ Variable to 255 to fade LED with pulse
-        sendDataToProcessing(‘B’,BPM);   // send heart rate with a ‘B’ prefix
-        sendDataToProcessing(‘Q’,IBI);   // send time between beats with a ‘Q’ prefix
-        QS = false;                      // reset the Quantified Self flag for next time
-     }
-  ledFadeToBeat();
-  delay(3);                             //  take a break
+    sendDataToProcessing('S', Signal);     // send Processing the raw Pulse Sensor data
+    if (QS == true){                       // Quantified Self flag is true when arduino finds a heartbeat
+          fadeRate = 255;                  // Set ‘fadeRate’ Variable to 255 to fade LED with pulse
+          sendDataToProcessing('B', BPM);   // send heart rate with a ‘B’ prefix
+          sendDataToProcessing('Q', IBI);   // send time between beats with a ‘Q’ prefix
+          QS = false;                      // reset the Quantified Self flag for next time
+    }
+    ledFadeToBeat();
+    // ledFadeFireFlyToBeat() 
+    delay(3);                             //  take a break
 }
+
 void ledFadeToBeat(){
     fadeRate -= 15;                         //  set LED fade value
     fadeRate = constrain(fadeRate,0,255);   //  keep LED fade value from going into negative numbers!
     analogWrite(fadePin,fadeRate);          //  fade LED
-  }
+}
+
+// bright like fire-Fly
+void ledFadeFireFlyToBeat(){
+    if(fadeRate > 200 ) { 
+      fadeRate -= 20;
+    } else if ( fadeRate > 150 ) { 
+      fadeRate -= 10;
+    } else if ( fadeRate > 100 ) { 
+      fadeRate -= 5;
+    } else if ( fadeRate > 50 ) { 
+      fadeRate -= 3;
+    } else if ( fadeRate > 0 ) { 
+      fadeRate -= 1;
+    }    
+    fadeRate = constrain(fadeRate,0,255);   //  keep LED fade value from going into negative numbers!
+    analogWrite(fadePin,fadeRate);          //  fade LED
+}
+ 
 void sendDataToProcessing(char symbol, int data ){
     //Serial.print(symbol);                // symbol prefix tells Processing what type of data is coming
     Serial.println(data);                // the data to send culminating in a carriage return
