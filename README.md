@@ -15,6 +15,7 @@
 - firstBeat: boolean
 - secondBeat: boolean
 - rate: 要素数10の配列, 過去の10回のIBIの値を保持する
+- amp: 振幅, 山のSignal-谷のSignalで求められる
 
 # kodouinc.ino
 
@@ -83,9 +84,21 @@ Timer2を初期化して、2msごとに割り込み処理を行う。
 - 60000/runningTotalでBPMを求める
 - QSをtrueにする(このinterruptが終わるまでは元に戻らない)
 
+閾値を決める
 - もしSignalが閾値以下でありPaluseがtrueの場合
     - Lowの値を出力
     - Paluseをfalse
+    - 山-谷の値で振幅(amp)を求める
+    - 閾値を更新する (thresh = amp/2 + 谷のSignal値)
+    - P, Tもthreshに更新
+
+一定時間触られなかった時に、諸々の変数を初期化する
+- もしSignalが入ってこずに2500ms以上時間が過ぎてしまった場合
+    - thresh, P, Tを初期値の512に初期化
+    - lastBeatTimeをsampleCounterと同じにする
+    - firstBeat, secondBeatフラグをtrueに初期化
+
+sei()で割り込みを許可させる
     
 
 # 割り込み処理
