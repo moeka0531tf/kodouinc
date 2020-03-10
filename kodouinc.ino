@@ -9,7 +9,7 @@ volatile int Signal;                // holds the incoming raw data
 volatile int IBI = 600;             // holds the time between beats, the Inter-Beat Interval
 volatile boolean Pulse = false;     // true when pulse wave is high, false when it’s low
 volatile boolean QS = false;        // becomes true when Arduoino finds a beat.
-volatile int thresh = 512;   
+volatile int thresh = 462;   
 void setup(){
   pinMode(blinkPin,OUTPUT);         // pin that will blink to your heartbeat!
   pinMode(fadePin,OUTPUT);          // pin that will fade to your heartbeat!
