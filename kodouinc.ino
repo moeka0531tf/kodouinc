@@ -9,7 +9,9 @@ volatile int Signal;                // holds the incoming raw data
 volatile int IBI = 600;             // holds the time between beats, the Inter-Beat Interval
 volatile boolean Pulse = false;     // true when pulse wave is high, false when it’s low
 volatile boolean QS = false;        // becomes true when Arduoino finds a beat.
-volatile int thresh = 512;   
+volatile int thresh = 512;
+volatile boolean upable = true;
+   
 void setup(){
   pinMode(blinkPin,OUTPUT);         // pin that will blink to your heartbeat!
   pinMode(fadePin,OUTPUT);          // pin that will fade to your heartbeat!
@@ -22,14 +24,16 @@ void setup(){
 void loop(){
     sendDataToProcessing('S', Signal);     // send Processing the raw Pulse Sensor data
     if (QS == true){                       // Quantified Self flag is true when arduino finds a heartbeat
-          fadeRate = 255;                  // Set ‘fadeRate’ Variable to 255 to fade LED with pulse
+          upable = true;
+          fadeRate = 0;                  // Set ‘fadeRate’ Variable to 255 to fade LED with pulse
+          // fadeRate = 255;
           //sendDataToProcessing('B', BPM);   // send heart rate with a ‘B’ prefix
           //sendDataToProcessing('Q', IBI);   // send time between beats with a ‘Q’ prefix
           QS = false;                      // reset the Quantified Self flag for next time
-          //sendDataToProcessing('T', thresh);
+          sendDataToProcessing('T', thresh);
     }
-    // ledFadeToBeat();
-    ledFadeFireFlyToBeat();
+    lightUpAndDown();
+    // ledFadeFireFlyToBeat();
     delay(3);                             //  take a break
 }
 
@@ -54,6 +58,20 @@ void ledFadeFireFlyToBeat(){
     }    
     fadeRate = constrain(fadeRate,0,255);   //  keep LED fade value from going into negative numbers!
     analogWrite(fadePin,fadeRate);          //  fade LED
+}
+
+// bright up and down
+void lightUpAndDown() {
+  if (upable==true) {
+    fadeRate += 5;
+    fadeRate = constrain(fadeRate,0,255); 
+    analogWrite(fadePin,fadeRate);
+    if (fadeRate >  254) {
+      upable = false;
+    }
+  } else {
+    ledFadeFireFlyToBeat();
+  }
 }
  
 void sendDataToProcessing(char symbol, int data ){
